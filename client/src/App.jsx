@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './Pages/auth/Login'
 import Register from './Pages/auth/Register'
 import OwnerDashboard from './Pages/owner/OwnerDashboard'
+import AdminDashboard from './Pages/admin/AdminDashboard'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Route path='/' element={<Login/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/owner' element={<OwnerDashboard/>}/>
+      <Route path='/admin' element={<AdminDashboard/>}/>
     </Routes>
   </BrowserRouter>
   )

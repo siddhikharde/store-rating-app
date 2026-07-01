@@ -72,7 +72,6 @@ function Register() {
 
         <p className="text-center mt-6">
           Already have account?
-
           <Link
             to="/"
             className="text-[#eebbc3] font-bold ml-2"
