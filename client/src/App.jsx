@@ -4,6 +4,7 @@ import Login from './Pages/auth/Login'
 import Register from './Pages/auth/Register'
 import OwnerDashboard from './Pages/owner/OwnerDashboard'
 import AdminDashboard from './Pages/admin/AdminDashboard'
+import UserDashboard from './Pages/user/UserDashboard'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path='/register' element={<Register/>}/>
       <Route path='/owner' element={<OwnerDashboard/>}/>
       <Route path='/admin' element={<AdminDashboard/>}/>
+      <Route path='/user' element={<UserDashboard/>}/>
     </Routes>
   </BrowserRouter>
   )
