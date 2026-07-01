@@ -23,7 +23,7 @@ function Button({
       type={type}
       onClick={onClick}
       className={`
-        px-5 py-3 rounded-lg font-bold transition
+        px-5 py-3 rounded-lg font-bold transition w-full cursor-pointer
         ${styles[variant]}
         ${className}
       `}
