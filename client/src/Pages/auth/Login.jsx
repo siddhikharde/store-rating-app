@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
+import Navbar from "../../components/Navbar";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,8 @@ function Login() {
   };
 
   return (
+   <>
+         <Navbar/>
     <div className="min-h-screen bg-[#232946] flex items-center justify-center p-5">
       <form
         onSubmit={handleSubmit}
@@ -58,6 +61,7 @@ function Login() {
         </p>
       </form>
     </div>
+    </>
   );
 }
 
