@@ -18,6 +18,7 @@ export const register = async(req,res)=>{
 
   if(exist){
     return res.status(400).json({
+       success:false,
       message:"User already exists"
     });
   }
@@ -35,6 +36,7 @@ export const register = async(req,res)=>{
   users.push(user);
 
   res.json({
+    success:true,
     message:"Register successful"
   });
 
@@ -52,6 +54,7 @@ export const login = async(req,res)=>{
 
   if(!user){
     return res.status(404).json({
+        success:false,
       message:"User not found"
     });
   }
@@ -64,6 +67,7 @@ export const login = async(req,res)=>{
 
   if(!match){
     return res.status(401).json({
+        success:false,
       message:"Invalid password"
     });
   }
@@ -81,7 +85,8 @@ export const login = async(req,res)=>{
 
   res.json({
     token,
-    user
+    data:user,
+    success:true
   });
 
 };
