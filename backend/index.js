@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import express from "express"
 import cors from "cors"
 import "./config/db.js";
-import {register } from "./controller/authController.js";
+import { login, register } from "./controller/authController.js";
 import pool from "./config/db.js";
 
 dotenv.config();
@@ -16,7 +16,7 @@ app.get("/",(req, res)=>{
 })
 
 app.post("/api/auth/register", register);
-// app.post("/api/auth/login", login);
+app.post("/api/auth/login", login);
 
 app.get("/users", async(req, res)=>{
     try{
