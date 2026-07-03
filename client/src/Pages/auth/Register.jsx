@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import api from "../../api/axios"
 import Input from "../../components/Input";
 import Button from "../../components/Button";
+import toast from "react-hot-toast";
 
 function Register() {
+  const navigate=useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -19,11 +22,25 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log(form);
-  };
+  try {
+    const response = await api.post(
+      "/auth/register",
+      form
+    );
+
+    toast.success(response.data.message);
+
+    navigate("/");
+  } catch (error) {
+    toast.error(
+      error.response?.data?.message ||
+      "Registration Failed"
+    );
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#232946] flex items-center justify-center p-5">
