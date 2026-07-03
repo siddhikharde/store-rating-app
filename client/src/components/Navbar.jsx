@@ -1,28 +1,34 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Button from "./Button";
 
 function Navbar() {
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
-    <nav className="bg-[#232946] text-white px-8 py-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">
-        Store Rating
-      </h1>
+    <nav className="h-16 bg-white shadow px-8 flex items-center justify-between">
+      <h2 className="text-2xl font-bold text-[#232946]">
+        Admin Dashboard
+      </h2>
 
-      <div className="flex gap-5">
-        <Link to="/user">
-          Stores
-        </Link>
+      <div className="flex items-center gap-4">
+        <span className="font-semibold text-[#232946]">
+          {user?.name}
+        </span>
 
-        <Link to="/admin">
-          Admin
-        </Link>
-
-        <Link to="/owner">
-          Owner
-        </Link>
-
-        <button className="bg-[#eebbc3] text-[#232946] px-4 py-2 rounded">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleLogout}
+        >
           Logout
-        </button>
+        </Button>
       </div>
     </nav>
   );
