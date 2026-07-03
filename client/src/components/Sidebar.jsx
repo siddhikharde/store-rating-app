@@ -1,28 +1,38 @@
-function Sidebar() {
+import { FaTimes } from "react-icons/fa";
+
+function Sidebar({ isOpen, setIsOpen }) {
   return (
-    <aside className="w-64 bg-[#232946] text-white p-6">
+    <>
+      <div
+        className={`fixed inset-0 bg-black/40 z-40 md:hidden ${
+          isOpen ? "block" : "hidden"
+        }`}
+        onClick={() => setIsOpen(false)}
+      />
 
-      <h1 className="text-3xl font-bold mb-10">
-        Store Rating
-      </h1>
+      <aside
+        className={`fixed md:static top-0 left-0 z-50 h-screen w-64 bg-[#232946] text-white p-6 transform transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
+        <button
+          onClick={() => setIsOpen(false)}
+          className="md:hidden mb-8 text-2xl"
+        >
+          <FaTimes />
+        </button>
 
-      <ul className="space-y-6">
+        <h1 className="text-3xl font-bold mb-10">
+          Store Rating
+        </h1>
 
-        <li className="hover:text-[#eebbc3] cursor-pointer font-medium">
-          Dashboard
-        </li>
-
-        <li className="hover:text-[#eebbc3] cursor-pointer font-medium">
-          Users
-        </li>
-
-        <li className="hover:text-[#eebbc3] cursor-pointer font-medium">
-          Stores
-        </li>
-
-      </ul>
-
-    </aside>
+        <ul className="space-y-6">
+          <li>Dashboard</li>
+          <li>Users</li>
+          <li>Stores</li>
+        </ul>
+      </aside>
+    </>
   );
 }
 

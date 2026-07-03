@@ -1,45 +1,62 @@
-import Navbar from "../../components/Navbar";
+import { useEffect, useState } from "react";
+import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardCard from "../../components/DashboardCard";
+import api from "../../api/axios";
+import toast from "react-hot-toast";
 
 function AdminDashboard() {
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    totalStores: 0,
+    totalRatings: 0
+  });
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await api.get("/admin/dashboard");
+
+      setStats(response.data);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+        "Failed to load dashboard"
+      );
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#b8c1ec]">
-
-      <Navbar />
-
-      <div className="p-8">
-
-        <h1 className="text-3xl font-bold text-[#232946]">
+    <DashboardLayout>
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-[#232946]">
           Admin Dashboard
         </h1>
 
-        <div className="grid md:grid-cols-3 gap-5 mt-6">
-
-          <div className="bg-white p-6 rounded-xl">
-            <h2 className="font-bold text-[#232946]">Users</h2>
-            <p className="text-4xl">
-              120
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl">
-            <h2 className="font-bold text-[#232946]">Stores</h2>
-            <p className="text-4xl">
-              40
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl">
-            <h2 className="font-bold text-[#232946]">Ratings</h2>
-            <p className="text-4xl">
-              500
-            </p>
-          </div>
-
-        </div>
-
+        <p className="text-gray-500 mt-2">
+          Welcome to the Store Rating System
+        </p>
       </div>
 
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <DashboardCard
+          title="Total Users"
+          value={stats.totalUsers}
+        />
+
+        <DashboardCard
+          title="Total Stores"
+          value={stats.totalStores}
+        />
+
+        <DashboardCard
+          title="Total Ratings"
+          value={stats.totalRatings}
+        />
+      </div>
+    </DashboardLayout>
   );
 }
 
