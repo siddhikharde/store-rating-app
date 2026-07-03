@@ -1,93 +1,45 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import pool from "../config/db.js";
 
-const users = [];
+export const register = async (req, res) => {
+  try {
+    const { name, email, password, address } = req.body;
 
-export const register = async(req,res)=>{
-  const {
-    name,
-    email,
-    password,
-    address
-  } = req.body;
+    if (!name || !email || !password || !address) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+    }
 
-  const exist = users.find(
-    user=>user.email===email
-  );
-
-  if(exist){
-    return res.status(400).json({
-       success:false,
-      message:"User already exists"
-    });
-  }
-
-  const hashPassword =
-    await bcrypt.hash(password,10);
-
-  const user = new User(
-    name,
-    email,
-    hashPassword,
-    address
-  );
-
-  users.push(user);
-
-  res.json({
-    success:true,
-    message:"Register successful"
-  });
-
-};
-
-export const login = async(req,res)=>{
-  const {
-    email,
-    password
-  } = req.body;
-
-  const user = users.find(
-    user=>user.email===email
-  );
-
-  if(!user){
-    return res.status(404).json({
-        success:false,
-      message:"User not found"
-    });
-  }
-
-  const match =
-    await bcrypt.compare(
-      password,
-      user.password
+    const userExists = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
     );
 
-  if(!match){
-    return res.status(401).json({
-        success:false,
-      message:"Invalid password"
+    if (userExists.rows.length > 0) {
+      return res.status(400).json({
+        message: "User already exists"
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await pool.query(
+      `INSERT INTO users(name,email,password,address)
+       VALUES($1,$2,$3,$4)`,
+      [name, email, hashedPassword, address]
+    );
+
+    res.status(201).json({
+      success:true,
+      message: "User registered successfully",
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Server Error"
     });
   }
-
-  const token = jwt.sign(
-    {
-      email:user.email,
-      role:user.role
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn:"1h"
-    }
-  );
-
-  res.json({
-    token,
-    data:user,
-    success:true
-  });
-
 };
-
