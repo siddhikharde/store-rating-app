@@ -1,0 +1,29 @@
+import pool from "../config/db.js";
+
+export const getDashboardStats = async (req, res) => {
+  try {
+    const totalUsers = await pool.query(
+      "SELECT COUNT(*) FROM users"
+    );
+
+    const totalStores = await pool.query(
+      "SELECT COUNT(*) FROM stores"
+    );
+
+    const totalRatings = await pool.query(
+      "SELECT COUNT(*) FROM ratings"
+    );
+
+    res.status(200).json({
+      totalUsers: Number(totalUsers.rows[0].count),
+      totalStores: Number(totalStores.rows[0].count),
+      totalRatings: Number(totalRatings.rows[0].count)
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
