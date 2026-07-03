@@ -1,22 +1,48 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import toast from "react-hot-toast";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Navbar from "../../components/Navbar";
+import api from "../../api/axios"
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate=useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log({
+  try {
+    const response = await api.post("/auth/login", {
       email,
       password
     });
-  };
+
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+
+    toast.success("Login Successful");
+
+    const role = response.data.user.role;
+
+    if (role === "ADMIN") {
+      navigate("/admin");
+    } else if (role === "OWNER") {
+      navigate("/owner");
+    } else {
+      navigate("/user");
+    }
+  }catch (error) {
+  console.log(error.response);
+
+  toast.error(
+    error.response?.data?.message || error.message
+  );
+}
+};
 
   return (
    <>
