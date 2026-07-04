@@ -4,6 +4,32 @@ export const getAllStores = async (req, res) => {
   try {
 
     const userId = req.user.id;
+    const { search, sort, order, page = 1, limit = 10 } = req.query;
+
+    const pageNum = parseInt(page) || 1;
+    const lim = parseInt(limit) || 10;
+
+    let params = [userId];
+
+    let whereClause = "";
+    if (search) {
+      params.push(`%${search}%`);
+      const idx = params.length;
+      whereClause = `WHERE s.name ILIKE $${idx} OR s.address ILIKE $${idx}`;
+    }
+
+    let orderBy = "ORDER BY s.id";
+    if (sort) {
+      const col = sort === "name" ? "s.name" : sort === "address" ? "s.address" : sort === "rating" ? "average_rating" : "s.id";
+      const ord = order && order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+      orderBy = `ORDER BY ${col} ${ord}`;
+    }
+
+    // add pagination params
+    params.push(lim);
+    params.push((pageNum - 1) * lim);
+    const limitIdx = params.length - 1; // lim index
+    const offsetIdx = params.length; // offset index
 
     const result = await pool.query(
       `
@@ -27,10 +53,13 @@ export const getAllStores = async (req, res) => {
       LEFT JOIN ratings r
       ON s.id=r.store_id
 
+      ${whereClause}
+
       GROUP BY s.id
-      ORDER BY s.id
+      ${orderBy}
+      LIMIT $${limitIdx} OFFSET $${offsetIdx}
       `,
-      [userId]
+      params
     );
 
     res.json(result.rows);
