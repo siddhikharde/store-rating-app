@@ -3,7 +3,7 @@ import express from "express"
 import cors from "cors"
 import "./config/db.js";
 import { getDashboardStats, getAllUsers, searchUsers, addUser, getStores, addStore, searchStores, updateUserPassword } from "./controller/adminController.js";
-import { login, register, changePassword, forgotPassword, resetPassword } from "./controller/authController.js";
+import { login, register, changePassword, forgotPassword, resetPassword } from "./controller/authcontroller.js";
 import { getOwnerDashboard } from "./controller/ownerController.js";
 import { getAllStores, rateStore} from "./controller/userController.js";
 import pool from "./config/db.js";
