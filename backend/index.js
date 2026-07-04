@@ -5,6 +5,7 @@ import "./config/db.js";
 import { getDashboardStats, getAllUsers, searchUsers, addUser,   getStores, addStore, searchStores } from "./controller/adminController.js";
 import { login, register } from "./controller/authController.js";
 import { getOwnerDashboard } from "./controller/ownerController.js";
+import { getAllStores, rateStore} from "./controller/userController.js";
 import pool from "./config/db.js";
 
 dotenv.config();
@@ -30,6 +31,9 @@ app.get("/api/admin/stores/search", searchStores);
 app.get("/api/admin/stores", );
 
 app.get("/api/owner/:id", getOwnerDashboard);
+
+app.get("/api/stores", getAllStores);
+app.post("/api/ratings", rateStore);
 
 app.listen(PORT,()=>{
     console.log(`Server is running on ${PORT}`);
