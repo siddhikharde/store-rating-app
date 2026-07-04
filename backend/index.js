@@ -33,7 +33,7 @@ app.get("/api/admin/stores/search", verifyToken, checkRole("ADMIN"), searchStore
 app.get("/api/admin/stores", verifyToken, checkRole("ADMIN"), getStores);
 
 app.get( "/api/owner/dashboard", verifyToken, checkRole("OWNER"), getOwnerDashboard);
-app.get("/api/stores", getAllStores);
+app.get( "/api/stores",verifyToken, checkRole("USER"),  getAllStores);
 app.post("/api/ratings", rateStore);
 
 app.listen(PORT,()=>{
