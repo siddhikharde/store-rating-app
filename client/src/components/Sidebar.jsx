@@ -30,7 +30,9 @@ function Sidebar({ isOpen, setIsOpen }) {
           <Link to="/admin/users">
             <li className="flex items-center gap-3 hover:text-[#eebbc3]"> Users</li>
           </Link>
-          <li>Stores</li>
+          <Link to="/admin/stores">
+  Stores
+</Link>
         </ul>
       </aside>
     </>
