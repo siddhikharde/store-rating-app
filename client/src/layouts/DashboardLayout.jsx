@@ -12,9 +12,9 @@ function DashboardLayout({ children }) {
       <div className="flex">
         <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
 
-        <main className="flex-1 p-6 md:p-8">
-          {children}
-        </main>
+       <main className="flex-1 p-6 overflow-x-hidden">
+  {children}
+</main>
       </div>
     </div>
   );

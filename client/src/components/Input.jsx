@@ -1,20 +1,20 @@
 function Input({
   type = "text",
   name,
-  value,
   placeholder,
-  onChange,
-  className = ""
+  value,
+  onChange
 }) {
   return (
     <input
       type={type}
       name={name}
-      value={value}
       placeholder={placeholder}
+      value={value}
       onChange={onChange}
-      className={`inputStyle ${className}`}
+      className="w-full p-3 mb-4 rounded-lg border border-gray-300 outline-none focus:ring-2 focus:ring-[#eebbc3]"
     />
   );
 }
+
 export default Input;
