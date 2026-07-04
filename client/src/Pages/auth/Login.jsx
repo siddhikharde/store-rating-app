@@ -76,15 +76,10 @@ function Login() {
           Login
         </Button>
 
-        <p className="text-center mt-6 text-[#232946]">
-          Don't have account?
-          <Link
-            to="/register"
-            className="text-[#eebbc3] font-bold ml-2"
-          >
-            Register
-          </Link>
-        </p>
+        <div className="flex justify-between items-center mt-4">
+          <p className="text-sm text-[#232946]">Don't have account? <Link to="/register" className="text-[#eebbc3] font-bold ml-2">Register</Link></p>
+          <Link to="/forgot-password" className="text-sm text-[#eebbc3]">Forgot password?</Link>
+        </div>
       </form>
     </div>
     </>

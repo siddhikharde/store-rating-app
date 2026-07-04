@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/axios"
+import api from "../../api/axios";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import toast from "react-hot-toast";
 
 function Register() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -15,32 +15,66 @@ function Register() {
     password: ""
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const validate = () => {
+    const errs = {};
+
+    const name = form.name?.trim() || "";
+    if (name.length < 20 || name.length > 60) {
+      errs.name = "Name must be between 20 and 60 characters";
+    }
+
+    const address = form.address?.trim() || "";
+    if (address.length === 0) {
+      errs.address = "Address is required";
+    } else if (address.length > 400) {
+      errs.address = "Address must be at most 400 characters";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email || "")) {
+      errs.email = "Invalid email address";
+    }
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,16}$/;
+    if (!passwordRegex.test(form.password || "")) {
+      errs.password = "Password must be 8-16 characters, include at least one uppercase letter and one special character";
+    }
+
+    setErrors(errs);
+
+    return Object.keys(errs).length === 0;
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await api.post(
-      "/auth/register",
-      form
-    );
+    if (!validate()) return;
 
-    toast.success(response.data.message);
+    try {
+      const response = await api.post(
+        "/auth/register",
+        form
+      );
 
-    navigate("/");
-  } catch (error) {
-    toast.error(
-      error.response?.data?.message ||
-      "Registration Failed"
-    );
-  }
-};
+      toast.success(response.data.message);
+
+      navigate("/");
+    } catch (error) {
+      const message = error.response?.data?.message || "Registration Failed";
+      toast.error(message);
+      setErrors({ form: message });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#232946] flex items-center justify-center p-5">
@@ -56,34 +90,48 @@ function Register() {
           Join Store Rating App
         </p>
 
-        <Input
-          name="name"
-          placeholder="Name"
-          onChange={handleChange}
-        />
+        <div className="mb-3">
+          <Input
+            name="name"
+            placeholder="Name"
+            onChange={handleChange}
+          />
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+        </div>
 
-        <Input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
+        <div className="mb-3">
+          <Input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+          />
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+        </div>
 
-        <textarea
-          name="address"
-          placeholder="Address"
-          onChange={handleChange}
-          className="w-full p-3 mb-4 rounded-lg border border-gray-300 outline-none focus:ring-2 focus:ring-[#eebbc3]"
-        />
+        <div className="mb-3">
+          <textarea
+            name="address"
+            placeholder="Address"
+            onChange={handleChange}
+            className="w-full p-3 mb-1 rounded-lg border border-gray-300 outline-none focus:ring-2 focus:ring-[#eebbc3]"
+          />
+          {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+        </div>
 
-        <Input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
+        <div className="mb-4">
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+          />
+          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+        </div>
 
-          <Button variant="primary">
+        {errors.form && <p className="text-red-500 text-sm mb-3">{errors.form}</p>}
+
+        <Button variant="primary">
           Register
         </Button>
 

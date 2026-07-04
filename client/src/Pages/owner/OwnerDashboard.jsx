@@ -6,29 +6,53 @@ import toast from "react-hot-toast";
 function OwnerDashboard() {
 
   const [store, setStore] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchStore();
   }, []);
 
   const fetchStore = async () => {
+    setIsLoading(true);
+    setErrorMessage("");
 
     try {
-
       const response = await api.get("/owner/dashboard");
       setStore(response.data);
-
     } catch (error) {
-      const message = error?.response?.data?.message || error.message || "Failed to fetch store data";
-      toast.error(message);
-    }
+      const status = error?.response?.status;
+      const serverMessage = error?.response?.data?.message;
 
+      if (status === 404 && serverMessage === "No store found for this owner") {
+        setErrorMessage(
+          "No store is currently assigned to your account. Please contact the admin to create or assign a store."
+        );
+      } else {
+        const message = serverMessage || error.message || "Unable to load your dashboard.";
+        setErrorMessage(message);
+        toast.error(message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  if (!store) {
+  if (isLoading) {
     return (
       <DashboardLayout>
         <h2>Loading...</h2>
+      </DashboardLayout>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <DashboardLayout>
+        <div className="rounded-xl bg-white p-8 shadow">
+          <h1 className="text-3xl font-bold text-[#232946] mb-4">Owner Dashboard</h1>
+          <p className="text-gray-600">{errorMessage}</p>
+        </div>
       </DashboardLayout>
     );
   }
