@@ -2,10 +2,9 @@ import dotenv from "dotenv"
 import express from "express"
 import cors from "cors"
 import "./config/db.js";
-import { getDashboardStats, getAllUsers, searchUsers, addUser,   getStores,
-  addStore,
-  searchStores } from "./controller/adminController.js";
+import { getDashboardStats, getAllUsers, searchUsers, addUser,   getStores, addStore, searchStores } from "./controller/adminController.js";
 import { login, register } from "./controller/authController.js";
+import { getOwnerDashboard } from "./controller/ownerController.js";
 import pool from "./config/db.js";
 
 dotenv.config();
@@ -26,24 +25,11 @@ app.get("/api/admin/users", getAllUsers);
 app.get("/api/admin/users/search", searchUsers);
 app.post("/api/admin/users", addUser);
 app.get("/api/admin/stores", getStores);
-
 app.post("/api/admin/stores", addStore);
-
 app.get("/api/admin/stores/search", searchStores);
-
 app.get("/api/admin/stores", );
 
-app.get("/users", async(req, res)=>{
-    try{
-        const result=await pool.query("SELECT * FROM users");
-        res.json(result.rows);
-    }catch(error){
-        console.error(error);
-        res.status(500).json({
-            message:"Database error"
-        });
-    }
-});
+app.get("/api/owner/:id", getOwnerDashboard);
 
 app.listen(PORT,()=>{
     console.log(`Server is running on ${PORT}`);
