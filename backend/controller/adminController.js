@@ -51,3 +51,34 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
+export const searchUsers = async (req, res) => {
+  try {
+    const { search = "" } = req.query;
+
+    const result = await pool.query(
+      `SELECT
+        id,
+        name,
+        email,
+        address,
+        role
+      FROM users
+      WHERE
+        LOWER(name) LIKE LOWER($1)
+        OR LOWER(email) LIKE LOWER($1)
+        OR LOWER(address) LIKE LOWER($1)
+        OR LOWER(role) LIKE LOWER($1)
+      ORDER BY id`,
+      [`%${search}%`]
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
