@@ -1,32 +1,91 @@
-import Navbar from "../../components/Navbar";
+import { useEffect, useState } from "react";
+import DashboardLayout from "../../layouts/DashboardLayout";
+import api from "../../api/axios";
+import toast from "react-hot-toast";
 
 function OwnerDashboard() {
+
+  const [store, setStore] = useState(null);
+
+  useEffect(() => {
+    fetchStore();
+  }, []);
+
+  const fetchStore = async () => {
+
+    try {
+
+      // Change 1 to logged-in owner's id later
+      const response = await api.get("/owner/1");
+
+      setStore(response.data);
+
+    } catch (error) {
+      toast.error("Failed to load dashboard");
+    }
+
+  };
+
+  if (!store) {
+    return (
+      <DashboardLayout>
+        <h2>Loading...</h2>
+      </DashboardLayout>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#b8c1ec]">
+    <DashboardLayout>
 
-      <Navbar />
+      <h1 className="text-3xl font-bold text-[#232946] mb-8">
+        Owner Dashboard
+      </h1>
 
-      <div className="p-8">
+      <div className="grid md:grid-cols-2 gap-6">
 
-        <h1 className="text-3xl font-bold text-[#232946]">
-          Owner Dashboard
-        </h1>
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-gray-500">
+            Store Name
+          </h2>
 
-        <div className="bg-white p-6 rounded-xl mt-6">
+          <p className="text-2xl font-bold mt-2">
+            {store.name}
+          </p>
+        </div>
 
-          <h2 className="text-xl font-bold">
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-gray-500">
+            Address
+          </h2>
+
+          <p className="text-2xl font-bold mt-2">
+            {store.address}
+          </p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-gray-500">
             Average Rating
           </h2>
 
-          <p className="text-5xl text-[#eebbc3] pt-5">
-            ⭐ 4.5
+          <p className="text-4xl font-bold mt-2">
+            {Number(store.average_rating).toFixed(1)}
           </p>
+        </div>
 
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-gray-500">
+            Total Ratings
+          </h2>
+
+          <p className="text-4xl font-bold mt-2">
+            {store.total_ratings}
+          </p>
         </div>
 
       </div>
 
-    </div>
+    </DashboardLayout>
   );
 }
 
