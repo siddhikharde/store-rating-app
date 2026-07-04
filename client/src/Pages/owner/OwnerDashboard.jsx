@@ -15,13 +15,12 @@ function OwnerDashboard() {
 
     try {
 
-      // Change 1 to logged-in owner's id later
-      const response = await api.get("/owner/1");
+   const response = await api.get("/owner/dashboard");
 
       setStore(response.data);
 
     } catch (error) {
-      toast.error("Failed to load dashboard");
+      toast.error("Access Denied");
     }
 
   };
