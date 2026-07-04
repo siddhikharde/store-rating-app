@@ -7,6 +7,8 @@ import { login, register } from "./controller/authController.js";
 import { getOwnerDashboard } from "./controller/ownerController.js";
 import { getAllStores, rateStore} from "./controller/userController.js";
 import pool from "./config/db.js";
+import verifyToken from "./middleware/verifyToken.js";
+import checkRole from "./middleware/checkRole.js";
 
 dotenv.config();
 const app=express();
@@ -21,14 +23,14 @@ app.get("/",(req, res)=>{
 app.post("/api/auth/register", register);
 app.post("/api/auth/login", login);
 
-app.get("/api/admin/dashboard", getDashboardStats);
-app.get("/api/admin/users", getAllUsers);
-app.get("/api/admin/users/search", searchUsers);
-app.post("/api/admin/users", addUser);
-app.get("/api/admin/stores", getStores);
-app.post("/api/admin/stores", addStore);
-app.get("/api/admin/stores/search", searchStores);
-app.get("/api/admin/stores", );
+app.get("/api/admin/dashboard", verifyToken,checkRole("ADMIN"), getDashboardStats);
+app.get("/api/admin/users", verifyToken, checkRole("ADMIN"), getAllUsers);
+app.get("/api/admin/users/search", verifyToken, checkRole("ADMIN"), searchUsers);
+app.post("/api/admin/users", verifyToken, checkRole("ADMIN"), addUser);
+app.get("/api/admin/stores", verifyToken, checkRole("ADMIN"), getStores);
+app.post("/api/admin/stores", verifyToken, checkRole("ADMIN"), addStore);
+app.get("/api/admin/stores/search", verifyToken, checkRole("ADMIN"), searchStores);
+app.get("/api/admin/stores", verifyToken, checkRole("ADMIN"), getStores);
 
 app.get("/api/owner/:id", getOwnerDashboard);
 
