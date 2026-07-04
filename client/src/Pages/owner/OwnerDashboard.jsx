@@ -15,12 +15,12 @@ function OwnerDashboard() {
 
     try {
 
-   const response = await api.get("/owner/dashboard");
-
+      const response = await api.get("/owner/dashboard");
       setStore(response.data);
 
     } catch (error) {
-      toast.error("Access Denied");
+      const message = error?.response?.data?.message || error.message || "Failed to fetch store data";
+      toast.error(message);
     }
 
   };
