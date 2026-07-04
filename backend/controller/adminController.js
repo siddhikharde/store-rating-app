@@ -141,3 +141,100 @@ export const addUser = async (req, res) => {
     });
   }
 };
+
+
+export const getStores = async (req, res) => {
+  try {
+
+    const stores = await pool.query(`
+      SELECT
+        stores.id,
+        stores.name,
+        stores.email,
+        stores.address,
+        users.name AS owner_name
+      FROM stores
+      LEFT JOIN users
+      ON stores.owner_id = users.id
+      ORDER BY stores.id
+    `);
+
+    res.json(stores.rows);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
+
+export const addStore = async (req, res) => {
+  try {
+
+    const {
+      name,
+      email,
+      address,
+      owner_id
+    } = req.body;
+
+    await pool.query(
+      `
+      INSERT INTO stores(name,email,address,owner_id)
+      VALUES($1,$2,$3,$4)
+      `,
+      [
+        name,
+        email,
+        address,
+        owner_id
+      ]
+    );
+
+    res.json({
+      message: "Store Added Successfully"
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
+
+export const searchStores = async (req, res) => {
+  try {
+
+    const { search } = req.query;
+
+    const stores = await pool.query(
+      `
+      SELECT
+        stores.id,
+        stores.name,
+        stores.email,
+        stores.address,
+        users.name AS owner_name
+      FROM stores
+      LEFT JOIN users
+      ON stores.owner_id = users.id
+      WHERE
+      stores.name ILIKE $1 OR
+      stores.email ILIKE $1 OR
+      stores.address ILIKE $1
+      ORDER BY stores.id
+      `,
+      [`%${search}%`]
+    );
+
+    res.json(stores.rows);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
