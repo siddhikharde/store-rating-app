@@ -3,10 +3,19 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import api from "../../api/axios";
 import toast from "react-hot-toast";
 import Input from "../../components/Input";
+import Button from "../../components/Button";
 
 function Users() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const [form, setForm] = useState({
+  name: "",
+  email: "",
+  password: "",
+  address: "",
+  role: "USER"
+});
+
 
   useEffect(() => {
     fetchUsers();
@@ -24,6 +33,41 @@ function Users() {
     }
   };
 
+  const handleChange = (e) => {
+  setForm({
+    ...form,
+    [e.target.name]: e.target.value
+  });
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await api.post(
+      "/admin/users",
+      form
+    );
+
+    toast.success(response.data.message);
+
+    fetchUsers();
+
+    setForm({
+      name: "",
+      email: "",
+      password: "",
+      address: "",
+      role: "USER"
+    });
+
+  } catch (error) {
+    toast.error(
+      error.response?.data?.message ||
+      "Failed to add user"
+    );
+  }
+};
 
   const handleSearch = async (e) => {
   const value = e.target.value;
@@ -58,6 +102,66 @@ function Users() {
   </div>
 
 </div>
+
+<form
+  onSubmit={handleSubmit}
+  className="bg-white p-6 rounded-xl shadow mb-8"
+>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    <Input
+      name="name"
+      placeholder="Name"
+      value={form.name}
+      onChange={handleChange}
+    />
+
+    <Input
+      type="email"
+      name="email"
+      placeholder="Email"
+      value={form.email}
+      onChange={handleChange}
+    />
+
+    <Input
+      type="password"
+      name="password"
+      placeholder="Password"
+      value={form.password}
+      onChange={handleChange}
+    />
+
+    <Input
+      name="address"
+      placeholder="Address"
+      value={form.address}
+      onChange={handleChange}
+    />
+
+    <select
+      name="role"
+      value={form.role}
+      onChange={handleChange}
+      className="border rounded-lg px-4 py-3"
+    >
+      <option value="USER">User</option>
+      <option value="OWNER">Owner</option>
+      <option value="ADMIN">Admin</option>
+    </select>
+
+  </div>
+
+  <div className="mt-6">
+
+    <Button type="submit">
+      Add User
+    </Button>
+
+  </div>
+
+</form>
 
       <div className="bg-white rounded-xl shadow overflow-x-auto">
         
