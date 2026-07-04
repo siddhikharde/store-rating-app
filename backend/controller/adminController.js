@@ -27,3 +27,27 @@ export const getDashboardStats = async (req, res) => {
     });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT
+        id,
+        name,
+        email,
+        address,
+        role,
+        created_at
+      FROM users
+      ORDER BY id`
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};

@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import express from "express"
 import cors from "cors"
 import "./config/db.js";
-import { getDashboardStats } from "./controller/adminController.js";
+import { getDashboardStats, getAllUsers } from "./controller/adminController.js";
 import { login, register } from "./controller/authController.js";
 import pool from "./config/db.js";
 
@@ -19,6 +19,7 @@ app.get("/",(req, res)=>{
 app.post("/api/auth/register", register);
 app.post("/api/auth/login", login);
 app.get("/api/admin/dashboard", getDashboardStats);
+app.get("/api/admin/users", getAllUsers);
 
 app.get("/users", async(req, res)=>{
     try{
