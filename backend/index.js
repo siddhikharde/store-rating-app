@@ -32,8 +32,7 @@ app.post("/api/admin/stores", verifyToken, checkRole("ADMIN"), addStore);
 app.get("/api/admin/stores/search", verifyToken, checkRole("ADMIN"), searchStores);
 app.get("/api/admin/stores", verifyToken, checkRole("ADMIN"), getStores);
 
-app.get("/api/owner/:id", getOwnerDashboard);
-
+app.get( "/api/owner/dashboard", verifyToken, checkRole("OWNER"), getOwnerDashboard);
 app.get("/api/stores", getAllStores);
 app.post("/api/ratings", rateStore);
 

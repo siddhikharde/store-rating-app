@@ -1,9 +1,11 @@
 import pool from "../config/db.js";
 
+
 export const getOwnerDashboard = async (req, res) => {
+
   try {
 
-    const ownerId = req.params.id;
+    const ownerId = req.user.id;
 
     const result = await pool.query(
       `
@@ -33,4 +35,5 @@ export const getOwnerDashboard = async (req, res) => {
     });
 
   }
+
 };
