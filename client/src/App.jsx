@@ -4,6 +4,7 @@ import Login from './Pages/auth/Login'
 import Register from './Pages/auth/Register'
 import OwnerDashboard from './Pages/owner/OwnerDashboard'
 import AdminDashboard from './Pages/admin/AdminDashboard'
+import Users from './Pages/admin/Users'
 import UserDashboard from './Pages/user/UserDashboard'
 
 function App() {
@@ -15,6 +16,8 @@ function App() {
       <Route path='/owner' element={<OwnerDashboard/>}/>
       <Route path='/admin' element={<AdminDashboard/>}/>
       <Route path='/user' element={<UserDashboard/>}/>
+      <Route path="/admin/users" element={<Users/>}
+/>
     </Routes>
   </BrowserRouter>
   )
