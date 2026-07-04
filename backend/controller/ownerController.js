@@ -24,8 +24,13 @@ export const getOwnerDashboard = async (req, res) => {
       [ownerId]
     );
 
-    res.json(result.rows[0]);
+   if (result.rows.length === 0) {
+  return res.status(404).json({
+    message: "No store found for this owner"
+  });
+}
 
+return res.json(result.rows[0]);
   } catch (error) {
 
     console.log(error);

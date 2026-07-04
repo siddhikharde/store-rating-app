@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 const PORT=process.env.PORT || 5000;
 
+console.log("SERVER LOADED");
 app.get("/",(req, res)=>{
     res.send("Api running");
 })
@@ -32,9 +33,11 @@ app.post("/api/admin/stores", verifyToken, checkRole("ADMIN"), addStore);
 app.get("/api/admin/stores/search", verifyToken, checkRole("ADMIN"), searchStores);
 app.get("/api/admin/stores", verifyToken, checkRole("ADMIN"), getStores);
 
-app.get( "/api/owner/dashboard", verifyToken, checkRole("OWNER"), getOwnerDashboard);
+app.get("/api/owner/dashboard", verifyToken, checkRole("OWNER"), getOwnerDashboard);
+app.get("/api/ownerDashboard", verifyToken, checkRole("OWNER"), getOwnerDashboard);
+
 app.get( "/api/stores",verifyToken, checkRole("USER"),  getAllStores);
-app.post("/api/ratings", rateStore);
+app.post("/api/ratings", verifyToken, checkRole("USER"), rateStore);
 
 app.listen(PORT,()=>{
     console.log(`Server is running on ${PORT}`);

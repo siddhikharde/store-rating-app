@@ -19,7 +19,9 @@ const verifyToken = (req, res, next) => {
       process.env.JWT_SECRET
     );
 
+   
     req.user = decoded;
+     console.log("DECODED USER:", req.user);
 
     next();
 
