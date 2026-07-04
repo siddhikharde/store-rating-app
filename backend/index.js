@@ -25,13 +25,13 @@ app.get("/api/admin/dashboard", getDashboardStats);
 app.get("/api/admin/users", getAllUsers);
 app.get("/api/admin/users/search", searchUsers);
 app.post("/api/admin/users", addUser);
-app.get("/admin/stores", getStores);
+app.get("/api/admin/stores", getStores);
 
-app.post("/admin/stores", addStore);
+app.post("/api/admin/stores", addStore);
 
-app.get("/admin/stores/search", searchStores);
+app.get("/api/admin/stores/search", searchStores);
 
-app.get("/admin/stores", );
+app.get("/api/admin/stores", );
 
 app.get("/users", async(req, res)=>{
     try{
