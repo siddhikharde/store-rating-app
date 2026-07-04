@@ -33,18 +33,18 @@ function UserDashboard() {
     try {
 
       await api.post("/ratings", {
-        user_id: 1,
-        store_id: storeId,
-        rating
-      });
-
+    store_id: storeId,
+    rating
+  });
       toast.success("Rating Submitted");
 
       fetchStores();
 
-    } catch {
-
-      toast.error("Failed");
+    } catch(error) {
+console.log(error.response);
+toast.error(
+  error.response?.data?.message || error.message
+);
 
     }
 
@@ -74,17 +74,20 @@ function UserDashboard() {
             <p className="text-gray-500 mt-2">
               {store.address}
             </p>
+            <p className="mt-2">
+              Your Rating : {store.user_rating ?? "Not Rated"}
+            </p>
 
             <p className="mt-3">
               Average Rating :
               <span className="font-bold ml-2">
-                {Number(store.average_rating).toFixed(1)}
+                {Number(store.average_rating || 0).toFixed(1)}
               </span>
             </p>
 
             <div className="flex gap-2 mt-5">
 
-              {[1,2,3,4,5].map(num => (
+              {[1, 2, 3, 4, 5].map(num => (
 
                 <Button
                   key={num}
